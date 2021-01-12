@@ -35,28 +35,31 @@ if (scoreButton !== null) {
 
 const displayScores = () => {
   fetch("/get-scores", { method: "GET" }).then((value) => {
-    value.json().then((data) => {
-      let scores = data["scores"];
+    value
+      .json()
+      .then((data) => {
+        let scores = data["scores"];
 
-      let scoreTable = "<p> sessionID: " + data["sessionID"] + "</p>";
+        let scoreTable = "<p> sessionID: " + data["sessionID"] + "</p>";
 
-      scoreTable += "<table border='1px solid black'>";
-      for (let period in scores) {
-        scoreTable += "<tr>";
-        scoreTable += "<td>" + scores[period].startTime + "</td>";
-        scoreTable += "<td>" + scores[period].endTime + "</td>";
-        scoreTable += "<td>" + scores[period].eventCount + "</td>";
-        scoreTable += "<td>" + scores[period].score + "</td>";
-        scoreTable += "</tr>";
-      }
-      scoreTable += "</table>";
+        scoreTable += "<table border='1px solid black'>";
+        for (let period in scores) {
+          scoreTable += "<tr>";
+          scoreTable += "<td>" + scores[period].startTime + "</td>";
+          scoreTable += "<td>" + scores[period].endTime + "</td>";
+          scoreTable += "<td>" + scores[period].eventCount + "</td>";
+          scoreTable += "<td>" + scores[period].score + "</td>";
+          scoreTable += "</tr>";
+        }
+        scoreTable += "</table>";
 
-      const resultsElement = document.getElementById("results");
-      if (resultsElement !== null) {
-        resultsElement.innerHTML = scoreTable;
-      } else {
-        console.log("HTML element not found");
-      }
-    });
+        const resultsElement = document.getElementById("results");
+        if (resultsElement !== null) {
+          resultsElement.innerHTML = scoreTable;
+        } else {
+          console.log("HTML element not found");
+        }
+      })
+      .catch((error) => console.log(error));
   });
 };

@@ -37,7 +37,9 @@ else {
 }
 var displayScores = function () {
     fetch("/get-scores", { method: "GET" }).then(function (value) {
-        value.json().then(function (data) {
+        value
+            .json()
+            .then(function (data) {
             var scores = data["scores"];
             var scoreTable = "<p> sessionID: " + data["sessionID"] + "</p>";
             scoreTable += "<table border='1px solid black'>";
@@ -57,6 +59,6 @@ var displayScores = function () {
             else {
                 console.log("HTML element not found");
             }
-        });
+        })["catch"](function (error) { return console.log(error); });
     });
 };
