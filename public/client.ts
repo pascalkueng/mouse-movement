@@ -33,6 +33,7 @@ if (scoreButton !== null) {
   console.log("HTML element not found");
 }
 
+// Get scores from the server and display them in a table
 const displayScores = () => {
   fetch("/get-scores", { method: "GET" }).then((value) => {
     value

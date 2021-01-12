@@ -35,6 +35,7 @@ if (scoreButton !== null) {
 else {
     console.log("HTML element not found");
 }
+// Get scores from the server and display them in a table
 var displayScores = function () {
     fetch("/get-scores", { method: "GET" }).then(function (value) {
         value
