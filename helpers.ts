@@ -12,17 +12,28 @@ const regularInteraction = Math.round((timePeriod / 1000) * 0.5);
 const minimalInteraction = Math.round((timePeriod / 1000) * 0.1);
 
 // Store mouse move events here
-let events: number[] = [];
+let events = new Map<string, number[]>();
 
 // Handle mouse move event
-export const handleEvent = (timeStamp: number) => {
+export const handleEvent = (sessionID: string, timeStamp: number) => {
   console.log("Received move event from client");
-  events.push(timeStamp);
+
+  let current = events.get(sessionID);
+
+  // Add timestampt to specified sessionID
+  if (current === undefined) {
+    events.set(sessionID, [timeStamp]);
+  } else {
+    current.push(timeStamp);
+    events.set(sessionID, current);
+  }
 };
 
 // Divides move events into time periods
 // based on start time and scores them
-export const getScores = (startTime: number) => {
+export const getTimePeriods = (sessionID: string, startTime: number) => {
+  const sessionEvents = events.get(sessionID) || [];
+
   const currentTime = new Date().getTime();
 
   let scoredTimePeriods: scoredTimePeriod[] = [];
@@ -34,7 +45,7 @@ export const getScores = (startTime: number) => {
     currentPeriod += timePeriod
   ) {
     let currentEventCount = 0;
-    while (events[eventIterator] - currentPeriod <= timePeriod) {
+    while (sessionEvents[eventIterator] - currentPeriod <= timePeriod) {
       currentEventCount++;
       eventIterator++;
     }

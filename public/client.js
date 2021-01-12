@@ -29,9 +29,34 @@ else {
 var scoreButton = document.getElementById("scores");
 if (scoreButton !== null) {
     scoreButton.addEventListener("click", function () {
-        return fetch("/log-scores", { method: "POST" });
+        displayScores();
     });
 }
 else {
     console.log("HTML element not found");
 }
+var displayScores = function () {
+    fetch("/get-scores", { method: "GET" }).then(function (value) {
+        value.json().then(function (data) {
+            var scores = data["scores"];
+            var scoreTable = "<p> sessionID: " + data["sessionID"] + "</p>";
+            scoreTable += "<table border='1px solid black'>";
+            for (var period in scores) {
+                scoreTable += "<tr>";
+                scoreTable += "<td>" + scores[period].startTime + "</td>";
+                scoreTable += "<td>" + scores[period].endTime + "</td>";
+                scoreTable += "<td>" + scores[period].eventCount + "</td>";
+                scoreTable += "<td>" + scores[period].score + "</td>";
+                scoreTable += "</tr>";
+            }
+            scoreTable += "</table>";
+            var resultsElement = document.getElementById("results");
+            if (resultsElement !== null) {
+                resultsElement.innerHTML = scoreTable;
+            }
+            else {
+                console.log("HTML element not found");
+            }
+        });
+    });
+};
